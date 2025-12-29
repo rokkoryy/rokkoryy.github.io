@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkpoint 4 - Responsive Preview</title>
+    <style>
+        /* Базовые стили */
+        :root {
+            --primary-color: #4776E6;
+            --secondary-color: #8E54E9;
+            --text-dark: #333;
+            --text-light: #666;
+            --background: #f8f9fa;
+            --white: #ffffff;
+            --shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            --shadow-hover: 0 20px 40px rgba(0, 0, 0, 0.12);
+            --radius: 15px;
+            --transition: all 0.3s ease;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: var(--background);
+            color: var(--text-dark);
+            line-height: 1.6;
+            min-height: 100vh;
+            padding-top: 70px; 
+        }
+        
+        .adaptation-panel {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 1rem;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        
+        .panel-left {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+        
+        .panel-right {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .device-label {
+            font-weight: 600;
+            color: var(--text-dark);
+            font-size: 0.9rem;
+        }
+        
+        .device-btn {
+            padding: 0.5rem 1rem;
+            border: 2px solid #e0e0e0;
+            background: white;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-dark);
+        }
+        
+        .device-btn:hover {
+            background: #f5f5f5;
+            border-color: var(--primary-color);
+        }
+        
+        .device-btn.active {
+            background: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+        
+        .device-btn i {
+            font-size: 1.1rem;
+        }
+        
+        .size-indicator {
+            background: #f0f0f0;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            color: var(--text-light);
+            font-weight: 500;
+        }
+        
+        .page-wrapper {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem;
+            transition: all 0.3s ease;
+        }
+        
+        .mobile-mode .page-wrapper {
+            max-width: 375px; 
+            margin: 0 auto;
+            padding: 1.5rem 1rem;
+            border: 2px dashed #e0e0e0;
+            border-radius: 20px;
+            background: white;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .tablet-mode .page-wrapper {
+            max-width: 768px; 
+            margin: 0 auto;
+            padding: 2rem 1.5rem;
+            border: 2px dashed #e0e0e0;
+            border-radius: 20px;
+            background: white;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .desktop-mode .page-wrapper {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .fullscreen-mode .page-wrapper {
+            max-width: 100%;
+            margin: 0;
+            padding: 2rem;
+        }
+        
+        .heading {
+            text-align: center;
+            font-size: clamp(1.8rem, 4vw, 2.5rem);
+            font-weight: 700;
+            margin-bottom: clamp(2rem, 5vw, 3.5rem);
+            line-height: 1.3;
+            color: var(--text-dark);
+            padding: 0 1rem;
+        }
+        
+        .card-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
+            gap: clamp(1.5rem, 3vw, 2rem);
+            width: 100%;
+        }
+        
+        .card {
+            background: var(--white);
+            border-radius: var(--radius);
+            padding: clamp(1.5rem, 3vw, 2.2rem);
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+        
+        .card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-hover);
+        }
+        
+        .icon-circle {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: clamp(60px, 10vw, 70px);
+            height: clamp(60px, 10vw, 70px);
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            border-radius: 50%;
+            margin-bottom: clamp(1.25rem, 3vw, 1.75rem);
+            flex-shrink: 0;
+        }
+        
+        .icon-circle svg {
+            width: clamp(26px, 5vw, 32px);
+            height: clamp(26px, 5vw, 32px);
+            fill: var(--white);
+        }
+        
+        .card-heading {
+            font-size: clamp(1.25rem, 3vw, 1.5rem);
+            font-weight: 600;
+            margin-bottom: clamp(0.75rem, 2vw, 1rem);
+            color: var(--text-dark);
+            line-height: 1.3;
+        }
+        
+        .card-desc {
+            color: var(--text-light);
+            font-size: clamp(0.95rem, 2vw, 1rem);
+            line-height: 1.6;
+            flex-grow: 1;
+        }
+        
+        @media (max-width: 480px) {
+            .adaptive-content .card-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .adaptive-content .page-wrapper {
+                padding: 1.25rem 1rem;
+            }
+        }
+        
+        @media (min-width: 481px) and (max-width: 768px) {
+            .adaptive-content .card-container {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        @media (min-width: 769px) {
+            .adaptive-content .card-container {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+        
+        .help-text {
+            text-align: center;
+            color: var(--text-light);
+            font-size: 0.9rem;
+            margin-top: 2rem;
+            padding: 1rem;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border-left: 4px solid var(--primary-color);
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .page-wrapper {
+            animation: fadeIn 0.3s ease;
+        }
+        
+        @media (max-width: 768px) {
+            .adaptation-panel {
+                padding: 0.75rem;
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .panel-left, .panel-right {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .device-btn {
+                padding: 0.4rem 0.8rem;
+                font-size: 0.8rem;
+            }
+            
+            body {
+                padding-top: 120px;
+            }
+        }
+        
+        .adaptive-content .adaptation-panel {
+            display: none;
+        }
+        
+        .adaptive-content body {
+            padding-top: 0;
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="desktop-mode">
+    <div class="adaptation-panel">
+        <div class="panel-left">
+            <button class="device-btn active" data-mode="desktop">
+                <i class="fas fa-desktop"></i> Desktop
+            </button>
+            <button class="device-btn" data-mode="tablet">
+                <i class="fas fa-tablet-alt"></i> Tablet
+            </button>
+            <button class="device-btn" data-mode="mobile">
+                <i class="fas fa-mobile-alt"></i> Mobile
+            </button>
+            <button class="device-btn" data-mode="fullscreen">
+                <i class="fas fa-expand"></i> Fullscreen
+            </button>
+            <button class="device-btn" data-mode="adaptive">
+                <i class="fas fa-sync-alt"></i> Real Adaptive
+            </button>
+        </div>
+        <div class="panel-right">
+            <div class="device-label">Current view:</div>
+            <div class="size-indicator" id="sizeIndicator">Desktop (1200px)</div>
+        </div>
+    </div>
+    
+    <div class="page-wrapper">
+        <h2 class="heading">We provide a wide range of creative services</h2>
+        
+        <div class="card-container">
+            <div class="card">
+                <div class="icon-circle">
+                    <svg viewBox="0 0 54 54">
+                        <path d="M27,8c-9.374,0-17,7.626-17,17c0,7.112,4.391,13.412,11,15.9V50c0,0.553,0.447,1,1,1h1v2c0,0.553,0.447,1,1,1h6c0.553,0,1-0.447,1-1v-2h1c0.553,0,1-0.447,1-1v-9.1c6.609-2.488,11-8.788,11-15.9C44,15.626,36.374,8,27,8z"/>
+                    </svg>
+                </div>
+                <h4 class="card-heading">High Quality</h4>
+                <p class="card-desc">
+                    Vitae suscipit tellus mauris a diam maecenas sed enim ut. 
+                    Mauris augue neque gravida in fermentum. Praesent semper 
+                    feugiat nibh sed pulvinar proin id venenatis.
+                </p>
+            </div>
+            
+            <div class="card">
+                <div class="icon-circle">
+                    <svg viewBox="0 0 54 54">
+                        <path d="M51.22,21h-5.052c-0.812,0-1.481-0.447-1.792-1.197s-0.153-1.54,0.42-2.114l3.572-3.571c0.525-0.525,0.814-1.224,0.814-1.966c0-0.743-0.289-1.441-0.814-1.967l-4.553-4.553c-1.05-1.05-2.881-1.052-3.933,0l-3.571,3.571c-0.574,0.573-1.366,0.733-2.114,0.421C33.447,9.313,33,8.644,33,7.832V2.78C33,1.247,31.753,0,30.22,0H23.78C22.247,0,21,1.247,21,2.78v5.052c0,0.812-0.447,1.481-1.197,1.792c-0.748,0.313-1.54,0.152-2.114-0.421l-3.571-3.571c-1.052-1.052-2.883-1.05-3.933,0l-4.553,4.553c-0.525,0.525-0.814,1.224-0.814,1.967c0,0.742,0.289,1.44,0.814,1.966l3.572,3.571c0.573,0.574,0.73,1.364,0.42,2.114S8.644,21,7.832,21H2.78C1.247,21,0,22.247,0,23.78v6.439C0,31.753,1.247,33,2.78,33h5.052c0.812,0,1.481,0.447,1.792,1.197s0.153,1.54-0.42,2.114l-3.572,3.571c-0.525,0.525-0.814,1.224-0.814,1.966c0,0.743,0.289,1.441,0.814,1.967l4.553,4.553c1.051,1.051,2.881,1.053,3.933,0l3.571-3.572c0.574-0.573,1.363-0.731,2.114-0.42c0.75,0.311,1.197,0.98,1.197,1.792v5.052c0,1.533,1.247,2.78,2.78,2.78h6.439c1.533,0,2.78-1.247,2.78-2.78v-5.052c0-0.812,0.447-1.481,1.197-1.792c0.751-0.312,1.54-0.153,2.114,0.42l3.571,3.572c1.052,1.052,2.883,1.05,3.933,0l4.553-4.553c0.525-0.525,0.814-1.224,0.814-1.967c0-0.742-0.289-1.44-0.814-1.966l-3.572-3.571c-0.573-0.574-0.73-1.364-0.42-2.114S45.356,33,46.168,33h5.052c1.533,0,2.78-1.247,2.78-2.78V23.78C54,22.247,52.753,21,51.22,21z"/>
+                    </svg>
+                </div>
+                <h4 class="card-heading">Creative Team</h4>
+                <p class="card-desc">
+                    Vitae suscipit tellus mauris a diam maecenas sed enim ut. 
+                    Mauris augue neque gravida in fermentum. Praesent semper 
+                    feugiat nibh sed pulvinar proin id venenatis.
+                </p>
+            </div>
+            
+            <div class="card">
+                <div class="icon-circle">
+                    <svg viewBox="0 0 60 60">
+                        <path d="M42.595,0H17.405C14.977,0,13,1.977,13,4.405v51.189C13,58.023,14.977,60,17.405,60h25.189C45.023,60,47,58.023,47,55.595V4.405C47,1.977,45.023,0,42.595,0z M15,8h30v38H15V8z"/>
+                    </svg>
+                </div>
+                <h4 class="card-heading">Amazing Results</h4>
+                <p class="card-desc">
+                    Vitae suscipit tellus mauris a diam maecenas sed enim ut. 
+                    Mauris augue neque gravida in fermentum. Praesent semper 
+                    feugiat nibh sed pulvinar proin id venenatis.
+                </p>
+            </div>
+            
+            <div class="card">
+                <div class="icon-circle">
+                    <svg viewBox="0 0 60 60">
+                        <path d="M38.914,0H6.5v60h47V14.586L38.914,0z M39.5,3.414L50.086,14H39.5V3.414z"/>
+                    </svg>
+                </div>
+                <h4 class="card-heading">Best Pricing</h4>
+                <p class="card-desc">
+                    Vitae suscipit tellus mauris a diam maecenas sed enim ut. 
+                    Mauris augue neque gravida in fermentum. Praesent semper 
+                    feugiat nibh sed pulvinar proin id venenatis.
+                </p>
+            </div>
+            
+            <div class="card">
+                <div class="icon-circle">
+                    <svg viewBox="0 0 61.168 61.168">
+                        <path d="M30.938,26.584c3.859,0,7-3.141,7-7s-3.141-7-7-7s-7,3.141-7,7S27.078,26.584,30.938,26.584z M50.216,37.584h-7.161l3.047-4.4c5.755-7.671,4.922-20.28-1.781-26.982c-3.621-3.622-8.437-5.617-13.56-5.617c-5.122,0-9.938,1.995-13.56,5.617c-6.703,6.702-7.536,19.312-1.804,26.952l3.068,4.431h-7.513L0,60.584h61.168L50.216,37.584z"/>
+                    </svg>
+                </div>
+                <h4 class="card-heading">Innovations</h4>
+                <p class="card-desc">
+                    Vitae suscipit tellus mauris a diam maecenas sed enim ut. 
+                    Mauris augue neque gravida in fermentum. Praesent semper 
+                    feugiat nibh sed pulvinar proin id venenatis.
+                </p>
+            </div>
+            
+            <div class="card">
+                <div class="icon-circle">
+                    <svg viewBox="0 0 60 60">
+                        <path d="M55.014,45.389l-9.553-4.776C44.56,40.162,44,39.256,44,38.248v-3.381c0.229-0.28,0.47-0.599,0.719-0.951c1.239-1.75,2.232-3.698,2.954-5.799C49.084,27.47,50,26.075,50,24.5v-4c0-0.963-0.36-1.896-1-2.625v-5.319c0.056-0.55,0.276-3.824-2.092-6.525C44.854,3.688,41.521,2.5,37,2.5s-7.854,1.188-9.908,3.53c-1.435,1.637-1.918,3.481-2.064,4.805C23.314,9.949,21.294,9.5,19,9.5c-10.389,0-10.994,8.855-11,9v4.579c-0.648,0.706-1,1.521-1,2.33v3.454c0,1.079,0.483,2.085,1.311,2.765c0.825,3.11,2.854,5.46,3.644,6.285v2.743c0,0.787-0.428,1.509-1.171,1.915l-6.653,4.173C1.583,48.134,0,50.801,0,53.703V57.5h14h2h44v-4.043C60,50.019,58.089,46.927,55.014,45.389z"/>
+                    </svg>
+                </div>
+                <h4 class="card-heading">24/7 Support</h4>
+                <p class="card-desc">
+                    Vitae suscipit tellus mauris a diam maecenas sed enim ut. 
+                    Mauris augue neque gravida in fermentum. Praesent semper 
+                    feugiat nibh sed pulvinar proin id venenatis.
+                </p>
+            </div>
+        </div>
+        
+        <div class="help-text">
+            <i class="fas fa-info-circle"></i> 
+            Use buttons above to switch between different screen size previews. 
+            "Real Adaptive" mode shows how the site responds to actual window resizing.
+        </div>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const buttons = document.querySelectorAll('.device-btn');
+            const body = document.body;
+            const sizeIndicator = document.getElementById('sizeIndicator');
+            
+            const modeInfo = {
+                'desktop': { text: 'Desktop (1200px)', icon: 'fas fa-desktop' },
+                'tablet': { text: 'Tablet (768px)', icon: 'fas fa-tablet-alt' },
+                'mobile': { text: 'Mobile (375px)', icon: 'fas fa-mobile-alt' },
+                'fullscreen': { text: 'Fullscreen (100%)', icon: 'fas fa-expand' },
+                'adaptive': { text: 'Real Adaptive', icon: 'fas fa-sync-alt' }
+            };
+            
+            buttons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const mode = this.getAttribute('data-mode');
+                    
+                    buttons.forEach(btn => btn.classList.remove('active'));
+                    
+                    this.classList.add('active');
+                    
+                    body.classList.remove('desktop-mode', 'tablet-mode', 'mobile-mode', 'fullscreen-mode', 'adaptive-content');
+                    
+                    if (mode === 'adaptive') {
+                        body.classList.add('adaptive-content');
+                    } else {
+                        body.classList.add(mode + '-mode');
+                    }
+                    
+                    sizeIndicator.textContent = modeInfo[mode].text;
+                    
+                    sizeIndicator.innerHTML = `<i class="${modeInfo[mode].icon}"></i> ${modeInfo[mode].text}`;
+                    
+                    localStorage.setItem('preferredMode', mode);
+                });
+            });
+            
+            const savedMode = localStorage.getItem('preferredMode') || 'desktop';
+            const savedButton = document.querySelector(`[data-mode="${savedMode}"]`);
+            if (savedButton) {
+                savedButton.click();
+            }
+            
+            function updateSizeIndicator() {
+                if (body.classList.contains('adaptive-content')) {
+                    const width = window.innerWidth;
+                    let sizeText = '';
+                    
+                    if (width < 480) {
+                        sizeText = `Mobile (${width}px)`;
+                    } else if (width < 768) {
+                        sizeText = `Tablet (${width}px)`;
+                    } else if (width < 1200) {
+                        sizeText = `Desktop (${width}px)`;
+                    } else {
+                        sizeText = `Large Desktop (${width}px)`;
+                    }
+                    
+                    sizeIndicator.innerHTML = `<i class="fas fa-sync-alt"></i> ${sizeText}`;
+                }
+            }
+            
+            window.addEventListener('resize', updateSizeIndicator);
+            
+            document.addEventListener('keydown', function(e) {
+                if (e.altKey) {
+                    switch(e.key) {
+                        case '1': document.querySelector('[data-mode="desktop"]').click(); break;
+                        case '2': document.querySelector('[data-mode="tablet"]').click(); break;
+                        case '3': document.querySelector('[data-mode="mobile"]').click(); break;
+                        case '4': document.querySelector('[data-mode="fullscreen"]').click(); break;
+                        case '5': document.querySelector('[data-mode="adaptive"]').click(); break;
+                    }
+                }
+            });
+            
+            // Подсказка по горячим клавишам
+            console.log(' Quick switch: Alt+1 Desktop | Alt+2 Tablet | Alt+3 Mobile | Alt+4 Fullscreen | Alt+5 Adaptive');
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,122 @@
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap");
+
+body {
+    background-color: #f2f2f2;
+    font-family: "Montserrat", sans-serif;
+    font-size: 1rem;
+    line-height: 1.6;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    margin: 0;
+}
+
+.page-wrapper {
+    width: 1140px;
+    display: flex;
+    flex-direction: column;
+    margin: 0 auto;
+}
+
+.heading {
+    color: #111111;
+    font-size: 2.25rem;
+    font-weight: 400;
+    line-height: 1.1;
+    margin-top: 66px;
+}
+
+.card-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 30px;
+    margin-top: 66px;
+}
+
+.card {
+    background-color: #fff;
+    flex-basis: calc(33.3% - 19.7px);
+    border-radius: 0 50px 0 0;
+}
+
+.card-content {
+    padding: 30px;
+}
+
+.icon-circle {
+    display: block;
+    background-color: #2692f7;
+    border-radius: 50%;
+    width: 77px;
+    height: 77px;
+    box-shadow: 5px 5px 20px 0 rgba(0, 0, 0, 0.2);
+    margin: 0 auto 0 0;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.icon-circle svg {
+    width: 37px;
+    height: 37px;
+    fill: #fff;
+}
+
+.card-heading {
+    margin-top: 14px;
+    line-height: 28.8px;
+    font-weight: 700;
+    font-size: 1.25rem;
+}
+
+.card-desc {
+    margin-top: 30px;
+    margin-bottom: 0;
+    font-family: "Open Sans", sans-serif;
+    color: #111;
+}
+
+@media (min-width: 992px) and (max-width: 1199px) {
+    .page-wrapper {
+        width: 940px;
+    }
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+    .page-wrapper {
+        width: 720px;
+    }
+
+    .card {
+        flex-basis: calc(50% - 15px);
+    }
+}
+
+@media (min-width: 576px) and (max-width: 767px) {
+    .page-wrapper {
+        width: 540px;
+    }
+
+    .card {
+        flex-basis: 100%;
+    }
+}
+
+@media (max-width: 575px) {
+    .page-wrapper {
+        width: 340px;
+    }
+
+    .card {
+        flex-basis: 100%;
+    }
+
+    .heading {
+        font-size: 1.5rem;
+    }
+}
